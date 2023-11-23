@@ -25,7 +25,7 @@ def station_name_to_code(station_name): # 입력 형식: string (station_NM = "�
         
     return station_dict[station_name]
 
-# [함수 2] (입력) 역 이름, 시간, 상행(1)/하행(2) + SEOUL_KEY → (출력) 현재 열차 코드
+# [함수 2] (입력) 역 이름, 시간, 상행(1)/하행(2) + SEOUL_KEY → (출력) 현재 열차 코드(TRAIN_CODE) + 무슨 행인지(SUBWAYEND) + 열차 도착 시간(ARRIVETIME)
 
 def train_code(STATION_NAME, TIME, INOUT_TAG, SEOUL_KEY):
     
@@ -50,21 +50,29 @@ def train_code(STATION_NAME, TIME, INOUT_TAG, SEOUL_KEY):
     # JSON 데이터를 딕셔너리로 파싱
     parsed_data = json.loads(response.text)
     
+    result_train = {
+        'TRAIN_CODE': None,
+        'SUBWAYEND': None,
+        'ARRIVETIME': None
+    }
+    
     # "row" 키에 해당하는 값에서 "ARRIVETIME"이 TIME보다 큰 빠른 열차 번호 찾기
-    fast_train = None
     min_time = float('inf')
     for train in parsed_data["SearchSTNTimeTableByIDService"]["row"]:
         if train.get("ARRIVETIME") >= TIME:
             train_time = int(train.get("ARRIVETIME").replace(":", ""))
             if train_time < min_time:
                 min_time = train_time
-                fast_train = train["TRAIN_NO"]
+                result_train['TRAIN_CODE'] = train["TRAIN_NO"]
+                result_train['SUBWAYEND'] = train["SUBWAYENAME"]
+                result_train['ARRIVETIME'] = train["ARRIVETIME"]
+                
 
-    if fast_train == None:
+    if result_train['TRAIN_CODE'] == None:
         print("해당 열차가 존재하지 않습니다.")
         return -1
     
-    return fast_train
+    return result_train
 
 # [함수 3] (입력) 열차 번호 + SK_KEY -> (출력) 실시간 혼잡도
 
