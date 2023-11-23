@@ -99,24 +99,3 @@ def train_number_to_current_congestion_list(TRAIN_NUMBER, SK_KEY):
     congestion_car_list = parsed_data['data']['congestionResult']['congestionCar'].split('|')
     
     return congestion_car_list
-
-# [함수 4] (입력) 역 이름, 상행(1)/하행(2) + SEOUL_KEY, SK_KEY, -> (출력) 그 역에 현재 오는 열차의 실시간 혼잡도
-
-def current_train_congestion_list(STATION_NAME, INOUT_TAG, SEOUL_KEY, SK_KEY):
-    
-    # 현재 시간 받아오기
-    CURRENT_TIME = datetime.now().strftime('%H:%M:%S')
-    
-    # 현재 시간에 <STATION_NAME>에 들어오는 <INOUT_TAG>행 열차 번호 받아오기
-    TRAIN_NUMBER = train_code(STATION_NAME, CURRENT_TIME, INOUT_TAG, SEOUL_KEY)
-
-    if TRAIN_NUMBER == -1:
-        return -1
-
-    # 그 열차에 대한 실시간 혼잡도 리스트 출력
-    CONGESTION_LIST = train_number_to_current_congestion_list(TRAIN_NUMBER, SK_KEY)
-    
-    if CONGESTION_LIST == -1:
-        return -1
-        
-    return train_number_to_current_congestion_list(TRAIN_NUMBER, SK_KEY)
