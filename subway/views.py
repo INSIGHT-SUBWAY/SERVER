@@ -8,10 +8,11 @@ import json
 import pandas as pd
 from datetime import datetime
 from django.http import JsonResponse
+import math
 
 # 1. 현재 들어오는 열차의 실시간 혼잡도
-    # request: 출발역, 도착역, 상행/하행(이 부분은 추후에 수정)
-    # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트
+    # request: 출발역, 도착역
+    # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트, 탑승 최소 혼잡도
 @api_view(['GET'])
 def current_congestion_list(request):
     # request
@@ -40,7 +41,7 @@ def current_congestion_list(request):
     if CONGESTION_LIST == -1:
         return JsonResponse({"error" : "현재 들어오는 열차의 혼잡도 정보가 없습니다."}, status=status.HTTP_200_OK)
     
-    # DISCOMFORT_LEVEL 계산
+    # DISCOMFORT_LEVEL (불쾌 지수) 계산
     CONGESTION_SUM = 0
     for congestion in CONGESTION_LIST:
         CONGESTION_SUM += int(congestion)
@@ -49,6 +50,16 @@ def current_congestion_list(request):
     
     DISCOMFORT_LEVEL = CONGESTION_AVG
 
+    # CURRENT_MIN_CONGESTION (탑승 최소 혼잡도) 계산
+    min = 500
+    min_car = 500
+    for i in range(len(CONGESTION_LIST)):
+        if int(CONGESTION_LIST[i]) <= min:
+            min = int(CONGESTION_LIST[i])
+            min_car = i
+
+        
+    CURRENT_MIN_CONGESTION_CAR = min_car + 1
 
     # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트
     
@@ -57,7 +68,8 @@ def current_congestion_list(request):
         'SUBWAYEND': CURRENT_TRAIN['SUBWAYEND'],
         'DISCOMFORT_LEVEL': DISCOMFORT_LEVEL,
         'ARRIVETIME': CURRENT_TRAIN['ARRIVETIME'],
-        'CONGESTION_LIST': CONGESTION_LIST
+        'CONGESTION_LIST': CONGESTION_LIST,
+        'CURRENT_MIN_CONGESTION_CAR': CURRENT_MIN_CONGESTION_CAR
     }  
 
     return JsonResponse(data, status=status.HTTP_200_OK)
