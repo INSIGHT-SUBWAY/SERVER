@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 from datetime import datetime
+from collections import deque
 
 # [함수 1] (입력) 역 이름 → (출력) 역 코드
 
