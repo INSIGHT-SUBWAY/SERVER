@@ -100,3 +100,68 @@ def train_number_to_current_congestion_list(TRAIN_NUMBER, SK_KEY):
     congestion_car_list = parsed_data['data']['congestionResult']['congestionCar'].split('|')
     
     return congestion_car_list
+
+# [함수 4] inout_tag 계산 함수 (내선: 1, 외선: 2, 역 이름 오류: -1)
+
+def in_out_tag(start_station, end_station):
+    
+    # 2호선 역이 맞는지 확인
+    station_list = [
+        '시청', '을지로입구', '을지로3가', '을지로4가', '동대문역사문화공원', '신당', '상왕십리', '왕십리', '한양대',
+        '뚝섬', '성수', '건대입구', '구의', '강변', '잠실나루', '잠실', '잠실새내', '종합운동장', '삼성', '선릉',
+        '역삼', '강남', '교대', '서초', '방배', '사당', '낙성대', '서울대입구', '봉천', '신림', '신대방',
+        '구로디지털단지', '대림', '신도림', '문래', '영등포구청', '당산', '합정', '홍대입구', '신촌', '이대', '아현',
+        '충정로'
+    ]
+
+    if (start_station not in station_list) or (end_station not in station_list):
+        return -1
+
+    in_dq = deque([
+        '시청', '을지로입구', '을지로3가', '을지로4가', '동대문역사문화공원', '신당', '상왕십리', '왕십리', '한양대',
+        '뚝섬', '성수', '건대입구', '구의', '강변', '잠실나루', '잠실', '잠실새내', '종합운동장', '삼성', '선릉',
+        '역삼', '강남', '교대', '서초', '방배', '사당', '낙성대', '서울대입구', '봉천', '신림', '신대방',
+        '구로디지털단지', '대림', '신도림', '문래', '영등포구청', '당산', '합정', '홍대입구', '신촌', '이대', '아현',
+        '충정로'
+    ])
+
+    out_dq = deque([
+        '시청', '을지로입구', '을지로3가', '을지로4가', '동대문역사문화공원', '신당', '상왕십리', '왕십리', '한양대',
+        '뚝섬', '성수', '건대입구', '구의', '강변', '잠실나루', '잠실', '잠실새내', '종합운동장', '삼성', '선릉',
+        '역삼', '강남', '교대', '서초', '방배', '사당', '낙성대', '서울대입구', '봉천', '신림', '신대방',
+        '구로디지털단지', '대림', '신도림', '문래', '영등포구청', '당산', '합정', '홍대입구', '신촌', '이대', '아현',
+        '충정로'
+    ])
+
+    in_cnt = 0
+    out_cnt = 0
+
+    # in_cnt 계산
+
+    cur = in_dq.popleft()
+    while (cur != start_station):
+        in_dq.append(cur)
+        cur = in_dq.popleft()
+
+    while (cur != end_station):
+        in_dq.append(cur)
+        cur = in_dq.popleft()
+        in_cnt = in_cnt + 1
+
+    # out_cnt 계산
+
+    cur = out_dq.pop()
+    while (cur != start_station):
+        out_dq.appendleft(cur)
+        cur = out_dq.pop()
+
+    while (cur != end_station):
+        out_dq.appendleft(cur)
+        cur = out_dq.pop()
+        out_cnt = out_cnt + 1
+
+    if (in_cnt <= out_cnt):
+        return 1
+    else:
+        return 2
+
