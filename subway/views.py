@@ -14,7 +14,7 @@ import math
     # request: 출발역, 도착역
     # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트, 탑승 최소 혼잡도
 @api_view(['GET'])
-def current_congestion_list(request):
+def analyze(request):
     # request
     start_station = request.query_params.get('start_station') # 출발역
     end_station = request.query_params.get('end_station') # 도착역
