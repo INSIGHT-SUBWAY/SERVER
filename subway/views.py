@@ -21,6 +21,8 @@ def current_congestion_list(request):
     # 함수에 넣을 변수들
     STATION_NAME = start_station
     INOUT_TAG = in_out_tag(start_station, end_station)
+    if (INOUT_TAG == -1):
+        return Response("입력하신 역의 정보가 존재하지 않습니다.", status=status.HTTP_200_OK)
     SEOUL_KEY = "6e4a46554a70707933335467424375"
     SK_KEY = "ZWIH3CaKXp3ivs1nrevX5abFzWs9bZQpct4kwz1i"
 
