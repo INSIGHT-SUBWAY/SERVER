@@ -17,11 +17,10 @@ def current_congestion_list(request):
     # request
     start_station = request.query_params.get('start_station') # 출발역
     end_station = request.query_params.get('end_station') # 도착역
-    inout = request.query_params.get('inout') # 상행/하행 (이 부분은 추후에 수정)
 
     # 함수에 넣을 변수들
     STATION_NAME = start_station
-    INOUT_TAG = inout
+    INOUT_TAG = in_out_tag(start_station, end_station)
     SEOUL_KEY = "6e4a46554a70707933335467424375"
     SK_KEY = "ZWIH3CaKXp3ivs1nrevX5abFzWs9bZQpct4kwz1i"
 
