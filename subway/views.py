@@ -9,6 +9,7 @@ import pandas as pd
 from datetime import datetime
 from django.http import JsonResponse
 import math
+from pytz import timezone
 
 # 1. 현재 들어오는 열차의 실시간 혼잡도
     # request: 출발역, 도착역
@@ -28,6 +29,7 @@ def analyze(request):
     SK_KEY = "0N9bFh3lC14tNjXc4Uv7x4Ddgjmqb45L8kzEQYHq"
 
     # 현재 시간 받아오기
+    datetime.now(timezone('Asia/Seoul'))
     CURRENT_TIME = datetime.now().strftime('%H:%M:%S')
 
     # 현재 들어오고 있는 열차 정보 받아오기
