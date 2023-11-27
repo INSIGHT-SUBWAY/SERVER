@@ -128,8 +128,17 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS error 해결
-CSRF_TRUSTED_ORIGINS = ['https://api.sursubway.store', 'http://127.0.0.1:8000' 'http://localhost:3000']
-
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS 설정
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    'https://api.sursubway.store',
+]
+
+# CSRF 설정
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    'https://api.sursubway.store',
+]
