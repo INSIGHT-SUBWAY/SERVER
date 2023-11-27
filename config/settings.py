@@ -126,4 +126,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CSRF error
-CSRF_TRUSTED_ORIGINS = ['*.sursubway.store']
+CSRF_TRUSTED_ORIGINS = ['https://api.sursubway.store']
