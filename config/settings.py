@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'subway',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -125,5 +128,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CSRF error
-CSRF_TRUSTED_ORIGINS = ['https://api.sursubway.store']
+# CSRF error 해결
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ['https://api.sursubway.store', 'http://localhost:3000']
