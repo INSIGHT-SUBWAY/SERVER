@@ -39,8 +39,7 @@ def analyze(request):
     CONGESTION_LIST = train_number_to_current_congestion_list(CURRENT_TRAIN['TRAIN_CODE'], SK_KEY)
     
     if CONGESTION_LIST == -1:
-        return JsonResponse({"error" : str(CURRENT_TIME)}, status=status.HTTP_200_OK)
-        # return JsonResponse({"error" : "현재 들어오는 열차의 혼잡도 정보가 없습니다."}, status=status.HTTP_200_OK)
+        return JsonResponse({"error" : "현재 들어오는 열차의 혼잡도 정보가 없습니다."}, status=status.HTTP_200_OK)
     
     # DISCOMFORT_LEVEL (불쾌 지수) 계산
     CONGESTION_SUM = 0
