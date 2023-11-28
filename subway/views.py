@@ -62,7 +62,7 @@ def analyze(request):
     CURRENT_MIN_CONGESTION_CAR = min_car + 1
 
     # 모델 예측 리스트
-    PRED_CONGESTION = route_congestion(start_station, end_station, INOUT_TAG)
+    PREDICTION = route_congestion(start_station, end_station, INOUT_TAG)
 
     # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트
     
@@ -73,7 +73,7 @@ def analyze(request):
         'ARRIVETIME': CURRENT_TRAIN['ARRIVETIME'],
         'CONGESTION_LIST': CONGESTION_LIST,
         'CURRENT_MIN_CONGESTION_CAR': CURRENT_MIN_CONGESTION_CAR,
-        'PRED_CONGESTION': PRED_CONGESTION
+        'PREDICTION': PREDICTION
     }  
 
     return JsonResponse(data, status=status.HTTP_200_OK)
@@ -86,10 +86,10 @@ def xgboost_test(request):
     INOUT_TAG = 1
 
     # 모델 예측 리스트
-    PRED_CONGESTION = route_congestion(start_station, end_station, INOUT_TAG)
+    PREDICTION = route_congestion(start_station, end_station, INOUT_TAG)
 
     data = {
-        'PRED_CONGESTION': PRED_CONGESTION
+        'PREDICTION': PREDICTION
     }
 
     return JsonResponse(data, status=status.HTTP_200_OK)
