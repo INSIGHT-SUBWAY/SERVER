@@ -230,7 +230,7 @@ def minValueIndex(array):
     min_value_index = np.unravel_index(np.argmin(array), array.shape)[1]
     return min_value_index + 1
 
-# [함수 7] 모델 돌려서 경로에서 예측한 혼잡도 리스트 불러오기
+# [함수 7] 모델 돌린 결과 반환
 def route_congestion(start_station, end_station, inout_tag):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
@@ -244,12 +244,25 @@ def route_congestion(start_station, end_station, inout_tag):
 
     # 경로 리스트 받아오기
     ROUTE_LIST = route_list(start_station, end_station, inout_tag)
+    
+    # 경로 최소 혼잡도 받아오기
+    MIN_MEAN_INDEX = minMeanIndex(predictions)
+    
+    # 경로 중 최소 혼잡도 받아오기
+    MIN_VALUE_INDEX = minValueIndex(predictions)
 
     # return list 만들기
     congestion_list = []
 
     for i in range(len(ROUTE_LIST)):
         congestion_list.append({ROUTE_LIST[i] : PRED_LIST[i]})
+        
+    # dictionary 형태로 합치기
+    data = {
+        'PRED_CONGESTION' : congestion_list,
+        'MIN_MEAN_INDEX' : MIN_MEAN_INDEX,
+        'MIN_VALUE_INDEX' : MIN_VALUE_INDEX
+    }
     
-    return congestion_list
+    return data
         
