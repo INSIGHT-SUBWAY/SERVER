@@ -87,6 +87,7 @@ def xgboost_test(request):
 
     # 모델 예측 리스트
     PREDICTION = route_congestion(start_station, end_station, INOUT_TAG)
+    print(PREDICTION)
 
     data = {
         'PREDICTION': PREDICTION

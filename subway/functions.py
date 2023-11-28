@@ -260,8 +260,8 @@ def route_congestion(start_station, end_station, inout_tag):
     # dictionary 형태로 합치기
     data = {
         'PRED_CONGESTION' : congestion_list,
-        'MIN_MEAN_INDEX' : MIN_MEAN_INDEX,
-        'MIN_VALUE_INDEX' : MIN_VALUE_INDEX
+        'MIN_MEAN_INDEX' : int(MIN_MEAN_INDEX),
+        'MIN_VALUE_INDEX' : int(MIN_VALUE_INDEX)
     }
     
     return data
