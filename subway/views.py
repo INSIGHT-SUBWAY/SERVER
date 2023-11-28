@@ -77,7 +77,7 @@ def analyze(request):
 
 # 모델 돌리기 테스트
 @api_view(['GET'])
-def xgboost(request):
+def xgboost_test(request):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
     X_test = pd.read_csv("./X_test.csv", index_col=0)
