@@ -3,12 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .functions import *
-import requests
 import json
 import pandas as pd
 from datetime import datetime
 from django.http import JsonResponse
-import math
+import requests
 import joblib
 
 # analyze 페이지
