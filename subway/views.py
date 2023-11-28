@@ -75,17 +75,17 @@ def analyze(request):
 
     return JsonResponse(data, status=status.HTTP_200_OK)
 
-# 모델 돌리기 테스트
-@api_view(['GET'])
-def xgboost(request):
-    # 모델 불러오기
-    loaded_model = joblib.load('xgboost_model.pkl')
-    X_test = pd.read_csv("./X_test(input).csv", index_col=0)
-    predictions = loaded_model.predict(X_test)
+# # 모델 돌리기 테스트
+# @api_view(['GET'])
+# def xgboost(request):
+#     # 모델 불러오기
+#     loaded_model = joblib.load('xgboost_model.pkl')
+#     X_test = pd.read_csv("./X_test(input).csv", index_col=0)
+#     predictions = loaded_model.predict(X_test)
 
-    # ndarray를 Python 리스트로 변환
-    my_data_list = predictions.tolist()
+#     # ndarray를 Python 리스트로 변환
+#     my_data_list = predictions.tolist()
 
-    # JSON으로 직렬화하여 응답 반환
-    json_data = json.dumps(my_data_list)
-    return JsonResponse(json_data, safe=False)
+#     # JSON으로 직렬화하여 응답 반환
+#     json_data = json.dumps(my_data_list)
+#     return JsonResponse(json_data, safe=False)
