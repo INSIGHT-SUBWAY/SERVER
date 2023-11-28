@@ -9,8 +9,9 @@ import pandas as pd
 from datetime import datetime
 from django.http import JsonResponse
 import math
+import joblib
 
-# 1. 현재 들어오는 열차의 실시간 혼잡도
+# analyze 페이지
     # request: 출발역, 도착역
     # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트, 탑승 최소 혼잡도
 @api_view(['GET'])
@@ -74,3 +75,18 @@ def analyze(request):
     }  
 
     return JsonResponse(data, status=status.HTTP_200_OK)
+
+# 모델 돌리기 테스트
+@api_view(['GET'])
+def xgboost(request):
+    # 모델 불러오기
+    loaded_model = joblib.load('xgboost_model.pkl')
+    X_test = pd.read_csv("./X_test(input).csv", index_col=0)
+    predictions = loaded_model.predict(X_test)
+
+    # ndarray를 Python 리스트로 변환
+    my_data_list = predictions.tolist()
+
+    # JSON으로 직렬화하여 응답 반환
+    json_data = json.dumps(my_data_list)
+    return JsonResponse(json_data, safe=False)
