@@ -3,6 +3,7 @@ import json
 import pandas as pd
 from datetime import datetime
 from collections import deque
+import joblib
 
 # [함수 1] (입력) 역 이름 → (출력) 역 코드
 
@@ -164,4 +165,64 @@ def in_out_tag(start_station, end_station):
         return 1
     else:
         return 2
+    
+# [함수 4] 경로 리스트 받아오기
+def route_list(start_station, end_station, inout_tag):
+    in_dq = deque([
+        '시청', '을지로입구', '을지로3가', '을지로4가', '동대문역사문화공원', '신당', '상왕십리', '왕십리', '한양대',
+        '뚝섬', '성수', '건대입구', '구의', '강변', '잠실나루', '잠실', '잠실새내', '종합운동장', '삼성', '선릉',
+        '역삼', '강남', '교대', '서초', '방배', '사당', '낙성대', '서울대입구', '봉천', '신림', '신대방',
+        '구로디지털단지', '대림', '신도림', '문래', '영등포구청', '당산', '합정', '홍대입구', '신촌', '이대', '아현',
+        '충정로'
+    ])
 
+    out_dq = deque([
+        '시청', '을지로입구', '을지로3가', '을지로4가', '동대문역사문화공원', '신당', '상왕십리', '왕십리', '한양대',
+        '뚝섬', '성수', '건대입구', '구의', '강변', '잠실나루', '잠실', '잠실새내', '종합운동장', '삼성', '선릉',
+        '역삼', '강남', '교대', '서초', '방배', '사당', '낙성대', '서울대입구', '봉천', '신림', '신대방',
+        '구로디지털단지', '대림', '신도림', '문래', '영등포구청', '당산', '합정', '홍대입구', '신촌', '이대', '아현',
+        '충정로'
+    ])
+
+    route = []
+
+    # in 일 때
+    if inout_tag == 1:
+        cur = in_dq.popleft()
+        while (cur != start_station):
+            in_dq.append(cur)
+            cur = in_dq.popleft()
+
+        while (cur != end_station):
+            in_dq.append(cur)
+            cur = in_dq.popleft()
+            route.append(cur)
+            
+    # out 일 때
+    if inout_tag == 2:
+        cur = out_dq.pop()
+        while (cur != start_station):
+            out_dq.appendleft(cur)
+            cur = out_dq.pop()
+
+        while (cur != end_station):
+            out_dq.appendleft(cur)
+            cur = out_dq.pop()
+            route.append(cur)
+
+    return route
+
+# [함수 5] 모델 돌려서 경로에서 예측한 혼잡도 리스트 불러오기
+def route_congestion(start_station, end_station, inout):
+    # 모델 불러오기
+    loaded_model = joblib.load('xgboost_model.pkl')
+
+    # (나중에 수정!!!) 예측값 리스트 받아오기
+    X_test = pd.read_csv("./X_test.csv", index_col=0)
+    predictions = loaded_model.predict(X_test)
+
+    # 경로 리스트 받아오기
+    ROUTE_LIST = route_list(start_station, end_station, inout)
+
+    # ndarray를 Python 리스트로 변환
+    my_data_list = predictions.tolist()
