@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 from collections import deque
 import joblib
+import numpy as np
 
 # [함수 1] (입력) 역 이름 → (출력) 역 코드
 
@@ -212,8 +213,18 @@ def route_list(start_station, end_station, inout_tag):
 
     return route
 
-# [함수 5] 모델 돌려서 경로에서 예측한 혼잡도 리스트 불러오기
-def route_congestion(start_station, end_station, inout):
+# 함수 [5] 경로 최소 혼잡도
+def minMeanIndex(array):
+    # 각 열의 평균 계산
+    column_means = np.mean(array, axis=0)
+
+    # 가장 작은 값을 가지는 열의 인덱스 찾기 
+    #(0-9까지 인덱스 반환되는거라서 + 1 한게 칸이 된다)
+    min_index = np.argmin(column_means)
+    return min_index + 1
+
+# [함수 7] 모델 돌려서 경로에서 예측한 혼잡도 리스트 불러오기
+def route_congestion(start_station, end_station, inout_tag):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
 
@@ -221,8 +232,17 @@ def route_congestion(start_station, end_station, inout):
     X_test = pd.read_csv("./X_test.csv", index_col=0)
     predictions = loaded_model.predict(X_test)
 
-    # 경로 리스트 받아오기
-    ROUTE_LIST = route_list(start_station, end_station, inout)
-
     # ndarray를 Python 리스트로 변환
-    my_data_list = predictions.tolist()
+    PRED_LIST = predictions.tolist()
+
+    # 경로 리스트 받아오기
+    ROUTE_LIST = route_list(start_station, end_station, inout_tag)
+
+    # return list 만들기
+    congestion_list = []
+
+    for i in range(len(ROUTE_LIST)):
+        congestion_list.append({ROUTE_LIST[i] : PRED_LIST[i]})
+    
+    return congestion_list
+        

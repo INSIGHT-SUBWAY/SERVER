@@ -25,7 +25,7 @@ def analyze(request):
     if (INOUT_TAG == -1):
         return JsonResponse({"error" : "입력하신 역의 정보가 존재하지 않습니다."}, status=status.HTTP_200_OK)
     SEOUL_KEY = "6e4a46554a70707933335467424375"
-    SK_KEY = "0N9bFh3lC14tNjXc4Uv7x4Ddgjmqb45L8kzEQYHq"
+    SK_KEY = "ZWIH3CaKXp3ivs1nrevX5abFzWs9bZQpct4kwz1i"
 
     # 현재 시간 받아오기
     CURRENT_TIME = datetime.now().strftime('%H:%M:%S')
@@ -61,6 +61,9 @@ def analyze(request):
         
     CURRENT_MIN_CONGESTION_CAR = min_car + 1
 
+    # 모델 예측 리스트
+    PRED_CONGESTION = route_congestion(start_station, end_station, INOUT_TAG)
+
     # response: ~행, 불쾌 지수, 열차 도착 시간, 실시간 혼잡도 리스트
     
     # 변수들을 하나의 딕셔너리로 합치기
@@ -69,7 +72,8 @@ def analyze(request):
         'DISCOMFORT_LEVEL': DISCOMFORT_LEVEL,
         'ARRIVETIME': CURRENT_TRAIN['ARRIVETIME'],
         'CONGESTION_LIST': CONGESTION_LIST,
-        'CURRENT_MIN_CONGESTION_CAR': CURRENT_MIN_CONGESTION_CAR
+        'CURRENT_MIN_CONGESTION_CAR': CURRENT_MIN_CONGESTION_CAR,
+        'PRED_CONGESTION': PRED_CONGESTION
     }  
 
     return JsonResponse(data, status=status.HTTP_200_OK)
@@ -77,14 +81,15 @@ def analyze(request):
 # 모델 돌리기 테스트
 @api_view(['GET'])
 def xgboost_test(request):
-    # 모델 불러오기
-    loaded_model = joblib.load('xgboost_model.pkl')
-    X_test = pd.read_csv("./X_test.csv", index_col=0)
-    predictions = loaded_model.predict(X_test)
+    start_station = '신촌'
+    end_station = '충정로'
+    INOUT_TAG = 1
 
-    # ndarray를 Python 리스트로 변환
-    my_data_list = predictions.tolist()
+    # 모델 예측 리스트
+    PRED_CONGESTION = route_congestion(start_station, end_station, INOUT_TAG)
 
-    # JSON으로 직렬화하여 응답 반환
-    json_data = json.dumps(my_data_list)
-    return JsonResponse(json_data, safe=False)
+    data = {
+        'PRED_CONGESTION': PRED_CONGESTION
+    }
+
+    return JsonResponse(data, status=status.HTTP_200_OK)
