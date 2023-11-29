@@ -240,7 +240,6 @@ def meanArray(array):
 
     return column_means
 
-# [함수 8] 모델 돌린 결과 반환
 def route_congestion(start_station, end_station, inout_tag):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
@@ -252,11 +251,11 @@ def route_congestion(start_station, end_station, inout_tag):
     # 208_220.csv: 왕십리-선릉
     if start_station == '왕십리' and end_station == '선릉': 
         input_df =  pd.read_csv("./208_220.csv", index_col=0)
-    # 240_205.csv: 신촌-동역사
-    elif start_station == '신촌' and end_station == '동역사' :
+    # 240_205.csv: 신촌-동대문역사문화공원
+    elif start_station == '신촌' and end_station == '동대문역사문화공원' :
         input_df =  pd.read_csv("./240_205.csv", index_col=0)
-    # 233_202.csv: 잠실새내-을지로입구
-    elif start_station == '잠실새내' and end_station == '을지로입구':
+    # 233_202.csv: 대림-을지로입구
+    elif start_station == '대림' and end_station == '을지로입구':
         input_df =  pd.read_csv("./233_202.csv", index_col=0)
     # 나중에 여기까지 지울 것
         
