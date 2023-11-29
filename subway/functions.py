@@ -279,4 +279,3 @@ def route_congestion(start_station, end_station, inout_tag):
     }
     
     return data
-        
