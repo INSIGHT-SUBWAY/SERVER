@@ -83,7 +83,7 @@ def analyze(request):
 def xgboost_test(request):
     start_station = '신촌'
     end_station = '충정로'
-    INOUT_TAG = 1
+    INOUT_TAG = in_out_tag(start_station, end_station)
 
     # 모델 예측 리스트
     PREDICTION = route_congestion(start_station, end_station, INOUT_TAG)
