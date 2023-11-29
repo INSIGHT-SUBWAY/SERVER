@@ -5,6 +5,7 @@ from datetime import datetime
 from collections import deque
 import joblib
 import numpy as np
+from .data import *
 
 # [함수 1] (입력) 역 이름 → (출력) 역 코드
 
@@ -230,17 +231,26 @@ def minValueIndex(array):
     min_value_index = np.unravel_index(np.argmin(array), array.shape)[1]
     return min_value_index + 1
 
-# [함수 7] 모델 돌린 결과 반환
+# [함수 7] 예측 평균 혼잡도
+def meanArray(array):
+    # 각 열의 평균 계산
+    column_means = np.mean(array, axis=0)
+    return column_means
+
+# [함수 8] 모델 돌린 결과 반환
 def route_congestion(start_station, end_station, inout_tag):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
 
-    # (나중에 수정!!!) 예측값 리스트 받아오기
+    # (여기는 나중에 삭제) 예측값 리스트 받아오기
     X_test = pd.read_csv("./X_test.csv", index_col=0)
-    predictions = loaded_model.predict(X_test)
-
-    # ndarray를 Python 리스트로 변환
+    predictions = loaded_model.predict(X_test) 
     PRED_LIST = predictions.tolist()
+
+    # # 나중에 위에 거를 이걸로 수정
+    # input_df =  # 전처리한 데이터프레임 받아오는 함수 (수빈 언니가 만들어 줄 것임)
+    # prediction_df = make_predictions(input_df, loaded_model)
+    # PRED_LIST = prediction_df.values.tolist()
 
     # 경로 리스트 받아오기
     ROUTE_LIST = route_list(start_station, end_station, inout_tag)
@@ -251,6 +261,9 @@ def route_congestion(start_station, end_station, inout_tag):
     # 경로 중 최소 혼잡도 받아오기
     MIN_VALUE_INDEX = minValueIndex(predictions)
 
+    # 칸별 경로 평균 혼잡도 예측 리스트 받아오기
+    MEAN_ARRAY = meanArray(predictions).tolist()
+    
     # return list 만들기
     congestion_list = []
 
@@ -261,7 +274,8 @@ def route_congestion(start_station, end_station, inout_tag):
     data = {
         'PRED_CONGESTION' : congestion_list,
         'MIN_MEAN_INDEX' : int(MIN_MEAN_INDEX),
-        'MIN_VALUE_INDEX' : int(MIN_VALUE_INDEX)
+        'MIN_VALUE_INDEX' : int(MIN_VALUE_INDEX),
+        'MEAN_ARRAY' : MEAN_ARRAY
     }
     
     return data
