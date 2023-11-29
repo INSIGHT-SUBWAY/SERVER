@@ -93,8 +93,6 @@ def train_number_to_current_congestion_list(TRAIN_NUMBER, SK_KEY):
     if result_response["success"] is False:
         print("해당 열차에 대한 실시간 혼잡도 정보가 존재하지 않습니다.")
         return -1
-
-    # 여기에 추가적인 코드를 넣을 수 있습니다.
     
     # JSON 문자열을 파이썬 객체로 변환
     parsed_data = json.loads(response.text)
