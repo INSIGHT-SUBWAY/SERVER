@@ -262,7 +262,7 @@ def route_congestion(start_station, end_station, inout_tag):
     prediction_df = make_predictions(input_df, loaded_model)
 
     # 여기도 지울 것
-    prediction_df = prediction_df.drop(df.index[0])
+    prediction_df = prediction_df.drop(prediction_df.index[0])
     # 여기까지
     
     congestion_columns = [col for col in prediction_df.columns if col.startswith('Congestion')]
