@@ -214,25 +214,30 @@ def route_list(start_station, end_station, inout_tag):
 
 # [함수 5] 경로 최소 혼잡도
 def minMeanIndex(array):
-    # 각 열의 평균 계산
-    column_means = np.mean(array, axis=0)
+    column_means = []
+    for col in range(len(array[0])):
+        col_sum = sum(row[col] for row in array)
+        col_mean = col_sum / len(array)
+        column_means.append(col_mean)
 
-    # 가장 작은 값을 가지는 열의 인덱스 찾기 
-    #(0-9까지 인덱스 반환되는거라서 + 1 한게 칸이 된다)
-    min_index = np.argmin(column_means)
+    min_index = column_means.index(min(column_means))
     return min_index + 1
 
 # [함수 6] 경로 중 최소 혼잡도
 def minValueIndex(array):
-    # 전체 배열에서 가장 작은 값이 있는 인덱스 찾기
-    # 마찬가지로 행 index 를 구하려면 +1 인덱스 
-    min_value_index = np.unravel_index(np.argmin(array), array.shape)[1]
-    return min_value_index + 1
+    min_value = min(min(row) for row in array)
+    for row in array:
+        if min_value in row:
+            return row.index(min_value) + 1
 
 # [함수 7] 예측 평균 혼잡도
 def meanArray(array):
-    # 각 열의 평균 계산
-    column_means = np.mean(array, axis=0)
+    column_means = []
+    for col in range(len(array[0])):
+        col_sum = sum(row[col] for row in array)
+        col_mean = col_sum / len(array)
+        column_means.append(col_mean)
+
     return column_means
 
 # [함수 8] 모델 돌린 결과 반환

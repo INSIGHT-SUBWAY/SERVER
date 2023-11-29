@@ -81,8 +81,8 @@ def analyze(request):
 # 모델 돌리기 테스트
 @api_view(['GET'])
 def xgboost_test(request):
-    start_station = '신촌'
-    end_station = '충정로'
+    start_station = request.query_params.get('start_station') # 출발역
+    end_station = request.query_params.get('end_station') # 도착역
     INOUT_TAG = in_out_tag(start_station, end_station)
 
     # 모델 예측 리스트
