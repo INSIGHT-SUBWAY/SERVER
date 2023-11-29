@@ -245,27 +245,38 @@ def route_congestion(start_station, end_station, inout_tag):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
 
-    # (여기는 나중에 삭제) 예측값 리스트 받아오기
-    X_test = pd.read_csv("./X_test.csv", index_col=0)
-    predictions = loaded_model.predict(X_test) 
-    PRED_LIST = predictions.tolist()
-
-    # # 나중에 위에 거를 이걸로 수정
+    # # 나중에 아래 거를 이걸로 수정
     # input_df =  # 전처리한 데이터프레임 받아오는 함수 (수빈 언니가 만들어 줄 것임)
-    # prediction_df = make_predictions(input_df, loaded_model)
-    # PRED_LIST = prediction_df.values.tolist()
+    
+    # 시연 영상용 모델 불러오기
+    # 208_220.csv: 왕십리-선릉
+    if start_station == '왕십리' and end_station == '선릉': 
+        input_df =  pd.read_csv("./208_220.csv", index_col=0)
+    # 240_205.csv: 신촌-동역사
+    elif start_station == '신촌' and end_station == '동역사' :
+        input_df =  pd.read_csv("./240_205.csv", index_col=0)
+    # 233_202.csv: 잠실새내-을지로입구
+    elif start_station == '잠실새내' and end_station == '을지로입구':
+        input_df =  pd.read_csv("./233_202.csv", index_col=0)
+    # 나중에 여기까지 지울 것
+        
+    prediction_df = make_predictions(input_df, loaded_model)
+    
+    congestion_columns = [col for col in prediction_df.columns if col.startswith('Congestion')]
+    
+    PRED_LIST = prediction_df[congestion_columns].values.tolist()
 
     # 경로 리스트 받아오기
     ROUTE_LIST = route_list(start_station, end_station, inout_tag)
     
     # 경로 최소 혼잡도 받아오기
-    MIN_MEAN_INDEX = minMeanIndex(predictions)
+    MIN_MEAN_INDEX = minMeanIndex(PRED_LIST)
     
     # 경로 중 최소 혼잡도 받아오기
-    MIN_VALUE_INDEX = minValueIndex(predictions)
+    MIN_VALUE_INDEX = minValueIndex(PRED_LIST)
 
     # 칸별 경로 평균 혼잡도 예측 리스트 받아오기
-    MEAN_ARRAY = meanArray(predictions).tolist()
+    MEAN_ARRAY = meanArray(PRED_LIST)
     
     # return list 만들기
     congestion_list = []
