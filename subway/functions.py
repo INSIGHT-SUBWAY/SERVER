@@ -244,26 +244,26 @@ def route_congestion(start_station, end_station, inout_tag):
     # 모델 불러오기
     loaded_model = joblib.load('xgboost_model.pkl')
 
-    # # 나중에 아래 거를 이걸로 수정
-    # input_df =  # 전처리한 데이터프레임 받아오는 함수 (수빈 언니가 만들어 줄 것임)
+    # 나중에 아래 거를 이걸로 수정
+    input_df =  main_func(start_station, end_station)
     
-    # 시연 영상용 모델 불러오기
-    # 208_220.csv: 왕십리-선릉
-    if start_station == '왕십리' and end_station == '선릉': 
-        input_df =  pd.read_csv("./208_220.csv", index_col=0)
-    # 240_205.csv: 신촌-동대문역사문화공원
-    elif start_station == '신촌' and end_station == '동대문역사문화공원' :
-        input_df =  pd.read_csv("./240_205.csv", index_col=0)
-    # 233_202.csv: 대림-을지로입구
-    elif start_station == '대림' and end_station == '을지로입구':
-        input_df =  pd.read_csv("./233_202.csv", index_col=0)
-    # 나중에 여기까지 지울 것
+    # # 시연 영상용 모델 불러오기
+    # # 208_220.csv: 왕십리-선릉
+    # if start_station == '왕십리' and end_station == '선릉': 
+    #     input_df =  pd.read_csv("./208_220.csv", index_col=0)
+    # # 240_205.csv: 신촌-동대문역사문화공원
+    # elif start_station == '신촌' and end_station == '동대문역사문화공원' :
+    #     input_df =  pd.read_csv("./240_205.csv", index_col=0)
+    # # 233_202.csv: 대림-을지로입구
+    # elif start_station == '대림' and end_station == '을지로입구':
+    #     input_df =  pd.read_csv("./233_202.csv", index_col=0)
+    # # 나중에 여기까지 지울 것
         
     prediction_df = make_predictions(input_df, loaded_model)
 
-    # 여기도 지울 것
-    prediction_df = prediction_df.drop(prediction_df.index[0])
-    # 여기까지
+    # # 여기도 지울 것
+    # prediction_df = prediction_df.drop(prediction_df.index[0])
+    # # 여기까지
     
     congestion_columns = [col for col in prediction_df.columns if col.startswith('Congestion')]
     
