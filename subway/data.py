@@ -402,7 +402,6 @@ def current_train_congestion_list(STATION_NAME, INOUT_TAG, SEOUL_KEY, SK_KEY):
     
     # 현재 시간에 <STATION_NAME>에 들어오는 <INOUT_TAG>행 열차 번호 받아오기
     TRAIN_NUMBER = train_code(STATION_NAME, CURRENT_TIME, INOUT_TAG, SEOUL_KEY)
-    print("TRAIN_NUMBER: " + str(TRAIN_NUMBER))
 
     if TRAIN_NUMBER == -1:
         return -1
@@ -863,8 +862,8 @@ def main_func(start_station_name, dest_station_name):
     #새로 데이터프레임 생성 시작 - final형태로 만들기
     df_add, CONGESTION_LIST, present_station_info = df_add_init(start_station_code, dest_station_code)
     
-    df_add = hour_to_int(df_add) 
-    df_add = make_minute_floor(df_add)
+    df_add['Hour'] = 8
+    df_add['Minute'] = 0
     
     INOUT_TAG = (in_out_tag(start_station_name, dest_station_name))+1
     df_add = store_route_code_to_df(df_add, INOUT_TAG, start_station_code, present_station_info)
