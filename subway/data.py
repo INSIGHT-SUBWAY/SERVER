@@ -430,7 +430,7 @@ def real_time_congestion_call(start_station_name, dest_station_name):
     else: INOUT_TAG = 2
 
     SEOUL_KEY = "6e4a46554a70707933335467424375" #📌 서울 열린 데이터 광장 인증키
-    SK_KEY = "KX05A4yBsc8zs7pXrtd0pjsy9wWpQpx4qtvulAxf" #📌 SK open API 앱키
+    SK_KEY = "DWJ3uJdzMy5lKNdoDgNUa2fe7zUjC3zw3UlfZ5h1" #📌 SK open API 앱키
 
 
     CURRENT_TIME = datetime.now().strftime('%H:%M:%S') #현재 시간 받아오기

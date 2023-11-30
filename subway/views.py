@@ -25,7 +25,7 @@ def analyze(request):
     if (INOUT_TAG == -1):
         return JsonResponse({"error" : "입력하신 역의 정보가 존재하지 않습니다."}, status=status.HTTP_200_OK)
     SEOUL_KEY = "6e4a46554a70707933335467424375"
-    SK_KEY = "pILPNpfcbg9HmQ2p1fEnV9ewGHiDdlXb3cdKwnas"
+    SK_KEY = "KX05A4yBsc8zs7pXrtd0pjsy9wWpQpx4qtvulAxf"
 
     # 현재 시간 받아오기
     CURRENT_TIME = datetime.now().strftime('%H:%M:%S')
